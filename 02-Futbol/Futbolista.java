@@ -24,7 +24,7 @@ public class Futbolista extends Thread {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        String[] nombres = {"AAA", "BBB", "CCC", "DDD", "EEE", "FFF", "GGGG", "HHH", "IIII", "JJJJ", "KKK"};
+        String[] nombres = {"AAA", "BBB", "CCC", "DDD", "EEE", "FFF", "GGG", "HHH", "III", "JJJ", "KKK"};
         Futbolista equipo[] = new Futbolista[NUM_JUGADORS];
         
         System.out.println("Inicia dels xuts --------------------");

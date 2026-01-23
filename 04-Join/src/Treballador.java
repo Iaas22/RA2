@@ -40,7 +40,7 @@ public class Treballador extends Thread {
             for (int mes = 1; mes <= 12; mes++) {
                 cobra();
                 pagaImpostos();
-                for (int i = 0; i < rnd.nextInt(1000); i++) {
+                for (int i = 0; i < rnd.nextInt(10); i++) {
                 }
             }
         }

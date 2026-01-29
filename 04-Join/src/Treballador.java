@@ -6,7 +6,7 @@ public class Treballador extends Thread {
     private int edat_fi_treball;
     private int edat_actual;
     private float cobrat;
-    private Random rnd;
+    private static final Random rnd = new Random();
 
     public Treballador(float sou_anual_brut, int edat_inici_treball, int edat_fi_treball, String nom) {
         super(nom);
@@ -15,7 +15,6 @@ public class Treballador extends Thread {
         this.edat_fi_treball = edat_fi_treball;
         this.edat_actual = 0;
         this.cobrat = 0.0f;
-        this.rnd = new Random();
     }
 
     public void cobra() {
@@ -23,7 +22,7 @@ public class Treballador extends Thread {
     }
 
     public void pagaImpostos() {
-        cobrat -= cobrat * 0.24f;
+        cobrat -= (sou_anual_brut / 12) * 0.24f;
     }
 
     public float getCobrat() {
@@ -36,7 +35,7 @@ public class Treballador extends Thread {
 
     @Override
     public void run() {
-        for (edat_actual = edat_inici_treball; edat_actual <= edat_fi_treball; edat_actual++) {
+        for (edat_actual = edat_inici_treball; edat_actual < edat_fi_treball; edat_actual++) {
             for (int mes = 1; mes <= 12; mes++) {
                 cobra();
                 pagaImpostos();

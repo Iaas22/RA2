@@ -15,9 +15,9 @@ public class Assistent extends Thread {
     public void run() {
         while (true) {
             if (Math.random() < 0.5) {
-                esdeveniment.ferReseva(this);
+                esdeveniment.ferReserva(this);
             } else {
-                esdeveniment.cancelaReseva(this);
+                esdeveniment.cancelaReserva(this);
             }
 
             try {

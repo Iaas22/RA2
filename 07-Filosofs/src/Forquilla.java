@@ -1,25 +1,25 @@
 public class Forquilla {
     private int numero;
-    private boolean esta;
+    private boolean enUs;
 
     public Forquilla(int numero) {
         this.numero = numero;
-        this.esta = true;
+        this.enUs = true;
     }
 
-    public int getNumero() {
+    public synchronized int getNumero() {
         return numero;
     }
 
-    public void setNumero(int numero) {
+    public synchronized void setNumero(int numero) {
         this.numero = numero;
     }
 
-    public boolean isEsta() {
-        return esta;
+    public synchronized boolean isEnUs() {
+        return enUs;
     }
 
-    public void setEsta(boolean esta) {
-        this.esta = esta;
+    public synchronized void setEnUs(boolean enUs) {
+        this.enUs = enUs;
     }
 }

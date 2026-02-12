@@ -21,17 +21,16 @@ public class Taula {
     }
 
     public void showTaula() {
-        System.out.println("==== TAULA ====");
         for (int i = 0; i < comensals.length; i++) {
-            System.out.println("Filosof " + comensals[i].getNom() + " te les forquilles:");
-            System.out.println("  - Esquerra: " + forquilles[i].getNumero());
-            System.out.println("  - Dreta: " + forquilles[(i + 1) % numFilosofs].getNumero());
+            int esquerra = forquilles[i].getNumero();
+            int dreta = forquilles[(i + 1) % numFilosofs].getNumero();
+            System.out.println("Comensals:fil" + i + " esq:" + esquerra + " dret:" + dreta);
         }
-        System.out.println("===============");
+        System.out.println("-----------");
     }
 
     public void cridarATaula() {
-        System.out.println("\nInician els filosofs a menjar...\n");
+        System.out.println();
         for (Filosof filosof : comensals) {
             filosof.start();
         }

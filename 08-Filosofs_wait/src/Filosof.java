@@ -1,11 +1,13 @@
 public class Filosof extends Thread {
     private String nom;
+    private int id;
     private Forquilla forquillaEsquerra;
     private Forquilla forquillaDreta;
     private int gana;
 
-    public Filosof(String nom, Forquilla forquillaEsquerra, Forquilla forquillaDreta) {
-        this.nom = nom;
+    public Filosof(int numero, Forquilla forquillaEsquerra, Forquilla forquillaDreta) {
+        this.id = numero;
+        this.nom = "fil" + numero;
         this.forquillaEsquerra = forquillaEsquerra;
         this.forquillaDreta = forquillaDreta;
         this.gana = 0;
@@ -14,7 +16,7 @@ public class Filosof extends Thread {
     public void menjar() {
         try {
             System.out.println(nom + " està menjant");
-            int temps = (int) (Math.random() * 1000 + 1000); // 1s a 2s
+            int temps = (int) (Math.random() * 1000 + 1000); 
             Thread.sleep(temps);
             System.out.println(nom + " ha acabat de menjar");
         } catch (InterruptedException e) {
@@ -25,7 +27,7 @@ public class Filosof extends Thread {
     public void pensar() {
         try {
             System.out.println(nom + " està pensant");
-            int temps = (int) (Math.random() * 1000 + 1000); // 1s a 2s
+            int temps = (int) (Math.random() * 1000 + 1000); 
             Thread.sleep(temps);
             System.out.println(nom + " ha acabat de pensar");
         } catch (InterruptedException e) {
@@ -33,29 +35,56 @@ public class Filosof extends Thread {
         }
     }
 
-    public void agafarForquillaEsquerra() throws InterruptedException {
-        synchronized (forquillaEsquerra) {
-            while (forquillaEsquerra.getPropietari() != Forquilla.LLIURE) {
-                forquillaEsquerra.wait();
-            }
-            forquillaEsquerra.setPropietari(Integer.parseInt(nom.substring(3)));
-            System.out.println(nom + " ha agafat la forquilla esquerra " + forquillaEsquerra.getNumero());
+    private int tempsEntreIntents() {
+        return (int) (Math.random() * 500 + 500);
+    }
+
+    private void esperarEnForquilla(Forquilla forquilla) throws InterruptedException {
+        synchronized (forquilla) {
+            forquilla.wait(tempsEntreIntents());
         }
     }
 
-    public void agafarForquillaDreta() throws InterruptedException {
-        synchronized (forquillaDreta) {
-            while (forquillaDreta.getPropietari() != Forquilla.LLIURE) {
-                forquillaDreta.wait();
+    private boolean intentarAgafarForquilla(Forquilla forquilla) {
+        synchronized (forquilla) {
+            if (forquilla.getPropietari() == Forquilla.LLIURE) {
+                forquilla.setPropietari(id);
+                return true;
             }
-            forquillaDreta.setPropietari(Integer.parseInt(nom.substring(3)));
+            return false;
+        }
+    }
+
+    public boolean agafarForquillaEsquerra() {
+        boolean agafada = intentarAgafarForquilla(forquillaEsquerra);
+        if (agafada) {
+            System.out.println(nom + " ha agafat la forquilla esquerra " + forquillaEsquerra.getNumero());
+        }
+        return agafada;
+    }
+
+    public boolean agafarForquillaDreta() {
+        boolean agafada = intentarAgafarForquilla(forquillaDreta);
+        if (agafada) {
             System.out.println(nom + " ha agafat la forquilla dreta " + forquillaDreta.getNumero());
         }
+        return agafada;
     }
 
     public void agafarForquilles() throws InterruptedException {
-        agafarForquillaEsquerra();
-        agafarForquillaDreta();
+        while (true) {
+            if (agafarForquillaEsquerra()) {
+                if (agafarForquillaDreta()) {
+                    return;
+                }
+                deixarForquillaEsquerra();
+                gana++;
+                esperarEnForquilla(forquillaDreta);
+            } else {
+                gana++;
+                esperarEnForquilla(forquillaEsquerra);
+            }
+        }
     }
 
     public void deixarForquillaEsquerra() {
@@ -77,6 +106,10 @@ public class Filosof extends Thread {
     public void deixarForquilles() {
         deixarForquillaEsquerra();
         deixarForquillaDreta();
+    }
+
+    public int getGana() {
+        return gana;
     }
 
     @Override
